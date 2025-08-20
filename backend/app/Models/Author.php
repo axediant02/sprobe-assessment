@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Author extends Model
 {
-    protected $filalble=['name','bio'];
+    use HasFactory;
+
+    protected $fillable =['name','bio'];
 
     public function books(){
         return $this->belongsToMany(Book::class);
