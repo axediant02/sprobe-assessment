@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->date('loan_date');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('book_id')->constrained()->cascadeOnDelete();
+            $table->date('loan_date')->default(now());
             $table->date('return_date')->nullable();
             $table->enum('status', ['ongoing', 'completed'])->default('ongoing');
             $table->timestamps();

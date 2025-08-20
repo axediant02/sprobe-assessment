@@ -25,6 +25,5 @@ class DatabaseSeeder extends Seeder
 
         Author::factory(5)->create();
         Book::factory(10)->create();
-        Member::factory(20)->create();
     }
 }
