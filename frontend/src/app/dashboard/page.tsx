@@ -8,6 +8,8 @@ import OverviewTab from '../../components/dashboard/OverviewTab';
 import LoansTab from '../../components/dashboard/LoansTab';
 import ProfileTab from '../../components/dashboard/ProfileTab';
 import BorrowModal from '../../components/dashboard/BorrowModal';
+import MyBooksTab from '../../components/dashboard/MyBooksTab';
+import AddBookModal from '../../components/dashboard/AddBookModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../lib/api';
@@ -38,6 +40,7 @@ export default function DashboardPage() {
   const [showBorrowModal, setShowBorrowModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [loanDuration, setLoanDuration] = useState(14);
+  const [showAddBookModal, setShowAddBookModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -138,6 +141,26 @@ export default function DashboardPage() {
     router.push('/login');
   };
 
+  const openAddBookModal = () => setShowAddBookModal(true);
+  const closeAddBookModal = () => setShowAddBookModal(false);
+
+  const handleCreateBook = async (payload: { title: string; description?: string }) => {
+    try {
+      // published_at defaults on server, but we can also send it explicitly
+      await api.post('/books', {
+        title: payload.title,
+        description: payload.description,
+        published_at: new Date().toISOString().split('T')[0],
+      });
+      toast.success('Book created!');
+      closeAddBookModal();
+      fetchBooks();
+      setActiveTab('books');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Failed to create book');
+    }
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-teal-600 flex items-center justify-center">
@@ -163,16 +186,7 @@ export default function DashboardPage() {
         )}
 
         {activeTab === 'books' && (
-          <div className="px-4 py-6 sm:px-0">
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">My Borrowed Books</h3>
-                <div className="text-center py-8 text-gray-500">
-                  <p>This section will show your currently borrowed books.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MyBooksTab books={books} onAddClick={openAddBookModal} />
         )}
 
         {activeTab === 'loans' && (
@@ -192,6 +206,12 @@ export default function DashboardPage() {
         loanDuration={loanDuration}
         onDurationChange={setLoanDuration}
         isBorrowing={borrowing === selectedBook?.id}
+      />
+
+      <AddBookModal
+        isOpen={showAddBookModal}
+        onClose={closeAddBookModal}
+        onConfirm={handleCreateBook}
       />
     </div>
   );
