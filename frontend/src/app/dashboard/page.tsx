@@ -146,7 +146,6 @@ export default function DashboardPage() {
 
   const handleCreateBook = async (payload: { title: string; description?: string }) => {
     try {
-      // published_at defaults on server, but we can also send it explicitly
       await api.post('/books', {
         title: payload.title,
         description: payload.description,

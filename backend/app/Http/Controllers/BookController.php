@@ -28,12 +28,10 @@ class BookController extends Controller
 			'published_at' => 'nullable|date',
 		]);
 
-		// Default publish date = today if not provided
 		$validated['published_at'] = $validated['published_at'] ?? Carbon::now()->toDateString();
 
 		$book = Book::create($validated);
 
-		// Auto-attach author as the logged-in user (create Author record by user name if needed)
 		$user = $request->user();
 		if ($user) {
 			$author = Author::firstOrCreate(['name' => $user->name], ['bio' => null]);
