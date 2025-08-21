@@ -13,14 +13,11 @@ class LoanController extends Controller
      */
     public function index()
     {
-        try {
-            return response()->json(Loan::with(['user', 'book'])->get(), 200);
-        } catch (\Exception $e) {
-            Log::error('Error fetching loans: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to fetch loans'], 500);
-        }
+        return response()->json(
+            Loan::with(['user','book'])->where('user_id', request()->user()->id)->get(),
+            200
+        );
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -28,24 +25,19 @@ class LoanController extends Controller
     {
         try {
             $validated = $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'book_id' => 'required|exists:books,id',
                 'loan_date' => 'required|date',
                 'return_date' => 'nullable|date|after_or_equal:loan_date',
             ]);
 
-            Log::info('Creating loan with validated data:', $validated);
+            $validated['user_id'] = $request->user()->id;
 
             $loan = Loan::create($validated);
 
-            Log::info('Loan created successfully:', $loan->toArray());
-
             return response()->json($loan->load(['user', 'book']), 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation error:', $e->errors());
             return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            Log::error('Error creating loan: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to create loan: ' . $e->getMessage()], 500);
         }
     }
