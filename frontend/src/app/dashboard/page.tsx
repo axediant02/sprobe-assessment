@@ -8,6 +8,9 @@ import OverviewTab from '../../components/dashboard/OverviewTab';
 import LoansTab from '../../components/dashboard/LoansTab';
 import ProfileTab from '../../components/dashboard/ProfileTab';
 import BorrowModal from '../../components/dashboard/BorrowModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import api from '../../lib/api';
 
 interface Book {
   id: number;
@@ -62,20 +65,8 @@ export default function DashboardPage() {
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/books', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setBooks(data.data || data);
-      } else {
-        console.error('Failed to fetch books');
-      }
+      const { data } = await api.get('/books');
+      setBooks(data.data || data);
     } catch (error) {
       console.error('Error fetching books:', error);
     } finally {
@@ -85,20 +76,8 @@ export default function DashboardPage() {
 
   const fetchLoans = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/loans', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setLoans(data.data || data);
-      } else {
-        console.error('Failed to fetch loans');
-      }
+      const { data } = await api.get('/loans');
+      setLoans(data.data || data);
     } catch (error) {
       console.error('Error fetching loans:', error);
     }
@@ -120,34 +99,20 @@ export default function DashboardPage() {
 
     try {
       setBorrowing(selectedBook.id);
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/loans', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          book_id: selectedBook.id,
-          loan_date: new Date().toISOString().split('T')[0],
-          return_date: new Date(Date.now() + loanDuration * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        }),
+      await api.post('/loans', {
+        book_id: selectedBook.id,
+        loan_date: new Date().toISOString().split('T')[0],
+        return_date: new Date(Date.now() + loanDuration * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       });
-
-      if (response.ok) {
-        alert('Book borrowed successfully!');
-        closeBorrowModal();
-        fetchBooks();
-        if (activeTab === 'loans') {
-          fetchLoans();
-        }
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to borrow book: ${errorData.message || 'Unknown error'}`);
+      toast.success('Book borrowed successfully!');
+      closeBorrowModal();
+      fetchBooks();
+      if (activeTab === 'loans') {
+        fetchLoans();
       }
     } catch (error) {
       console.error('Error borrowing book:', error);
-      alert('Failed to borrow book. Please try again.');
+      toast.error('Failed to borrow book. Please try again.');
     } finally {
       setBorrowing(null);
     }
@@ -155,29 +120,15 @@ export default function DashboardPage() {
 
   const handleReturnBook = async (loanId: number) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8000/api/loans/${loanId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          status: 'completed',
-          return_date: new Date().toISOString().split('T')[0],
-        }),
+      await api.put(`/loans/${loanId}`, {
+        status: 'completed',
+        return_date: new Date().toISOString().split('T')[0],
       });
-
-      if (response.ok) {
-        alert('Book returned successfully!');
-        fetchLoans();
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to return book: ${errorData.message || 'Unknown error'}`);
-      }
+      toast.success('Book returned successfully!');
+      fetchLoans();
     } catch (error) {
       console.error('Error returning book:', error);
-      alert('Failed to return book. Please try again.');
+      toast.error('Failed to return book. Please try again.');
     }
   };
 
@@ -197,6 +148,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToastContainer position="top-center" theme="colored" autoClose={3000} />
       <Header userName={user.name} onLogout={handleLogout} />
       <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
 
