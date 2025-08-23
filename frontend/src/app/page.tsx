@@ -365,7 +365,6 @@ export default function HomePage() {
       <footer className="bg-white py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Company Info */}
             <div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Genius</h3>
               <p className="text-gray-600 mb-4">
@@ -408,16 +407,16 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold text-gray-900 mb-4">Contact</h4>
               <ul className="space-y-2">
-                <li className="text-gray-600">📧 info@genius.com</li>
-                <li className="text-gray-600">📞 +1 (555) 123-4567</li>
-                <li className="text-gray-600">📍 123 Library St, Book City</li>
+                <li className="text-gray-600">📧 ianfredcaballero@gmail.com</li>
+                <li className="text-gray-600">📞 +639765407577</li>
+                <li className="text-gray-600">📍 Toledo City, Cebu</li>
               </ul>
             </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-gray-200 text-center">
             <p className="text-gray-600">
-              © 2024 Genius Library Management System. All rights reserved.
+              © 2025 Library Management System. All rights reserved.
             </p>
           </div>
         </div>

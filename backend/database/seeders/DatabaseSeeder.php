@@ -14,14 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a default user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
         User::factory(4)->create();
 
-        // Call individual seeders
         $this->call([
             AuthorSeeder::class,
             BookSeeder::class,
