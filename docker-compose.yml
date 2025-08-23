@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Database - MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: library_db
+    environment:
+      MYSQL_DATABASE: library_management
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_USER: library_user
+      MYSQL_PASSWORD: password123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # Laravel Backend
+  backend:
+    build: ./backend
+    container_name: library_backend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_DATABASE=library_management
+      - DB_USERNAME=library_user
+      - DB_PASSWORD=password123
+
+  # React Frontend
+  frontend:
+    build: ./frontend
+    container_name: library_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+# Store database data
+volumes:
+  mysql_data:
+
