@@ -108,23 +108,6 @@ npm run dev
 
 The frontend will be available at `http://localhost:3000`
 
-## 🗄️ Database Configuration
-
-### MySQL Setup
-```sql
-CREATE DATABASE library_management;
-CREATE USER 'library_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON library_management.* TO 'library_user'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### PostgreSQL Setup
-```sql
-CREATE DATABASE library_management;
-CREATE USER library_user WITH PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE library_management TO library_user;
-```
-
 ## 🧪 Running Tests
 
 ### Backend Tests
@@ -242,85 +225,3 @@ SPROBE_ASSESSMENT/
 │   └── package.json
 └── README.md
 ```
-
-## 🚀 Deployment
-
-### Backend Deployment (Laravel)
-
-1. **Production Environment Setup**
-```bash
-# Set environment to production
-APP_ENV=production
-APP_DEBUG=false
-
-# Optimize for production
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-```
-
-2. **Web Server Configuration**
-   - Configure your web server (Apache/Nginx) to point to the `public` directory
-   - Set up SSL certificates
-   - Configure environment variables
-
-### Frontend Deployment (React)
-
-1. **Build for Production**
-```bash
-npm run build
-```
-
-2. **Deploy the `out` directory** to your web server or CDN
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **Database Connection Error**
-   - Verify database credentials in `.env`
-   - Ensure database server is running
-   - Check database permissions
-
-2. **Composer Dependencies**
-   ```bash
-   composer install --no-dev --optimize-autoloader
-   ```
-
-3. **Node Modules Issues**
-   ```bash
-   rm -rf node_modules package-lock.json
-   npm install
-   ```
-
-4. **Permission Issues**
-   ```bash
-   chmod -R 755 storage bootstrap/cache
-   ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-For support and questions:
-- Create an issue in the repository
-- Contact: [your-email@example.com]
-
-## 🎯 Testing Results
-
-- **Total Tests**: 98
-- **Assertions**: 369
-- **Coverage**: Comprehensive coverage of all critical functionalities
-- **Test Suites**: Feature (79 tests) + Unit (19 tests)
-
-All tests pass successfully, ensuring code quality and reliability.
