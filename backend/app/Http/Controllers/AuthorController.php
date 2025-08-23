@@ -77,4 +77,14 @@ class AuthorController extends Controller
         return response()->json(['message' => 'Author deleted'], 200);
     }
 
+    public function books(string $id)
+    {
+        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+
+        return response()->json($author->books, 200);
+    }
 }
