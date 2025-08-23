@@ -41,6 +41,8 @@ class LoanItemController extends Controller
 
             Log::info('Loan item created successfully:', $loanItem->toArray());
 
+            // Refresh the model to get the default values and then load relationships
+            $loanItem->refresh();
             return response()->json($loanItem->load(['loan.user', 'book']), 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error:', $e->errors());

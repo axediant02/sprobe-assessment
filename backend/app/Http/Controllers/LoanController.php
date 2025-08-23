@@ -34,6 +34,8 @@ class LoanController extends Controller
 
             $loan = Loan::create($validated);
 
+            // Refresh the model to get the default values and then load relationships
+            $loan->refresh();
             return response()->json($loan->load(['user', 'book']), 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
@@ -84,6 +86,8 @@ class LoanController extends Controller
             $loan->update($validated);
 
             return response()->json($loan->load(['user', 'book']), 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
             Log::error('Error updating loan: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to update loan'], 500);
@@ -108,6 +112,24 @@ class LoanController extends Controller
         } catch (\Exception $e) {
             Log::error('Error deleting loan: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to delete loan'], 500);
+        }
+    }
+
+    public function complete(string $id)
+    {
+        try {
+            $loan = Loan::find($id);
+
+            if (!$loan) {
+                return response()->json(['message' => 'Loan not found'], 404);
+            }
+
+            $loan->update(['status' => 'completed']);
+
+            return response()->json($loan->load(['user', 'book']), 200);
+        } catch (\Exception $e) {
+            Log::error('Error completing loan: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to complete loan'], 500);
         }
     }
 }
