@@ -56,7 +56,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-teal-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
-        {/* Header */}
         <div className="text-center">
           <div className="mx-auto h-16 w-16 bg-teal-600 rounded-full flex items-center justify-center shadow-lg">
             <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,10 +70,8 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Form */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Full Name
@@ -94,7 +91,6 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
@@ -114,7 +110,6 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -134,7 +129,6 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Confirm Password Field */}
             <div>
               <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700">
                 Confirm Password
@@ -155,14 +149,12 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
-          {/* Submit Button */}
           <div>
             <button
               type="submit"
@@ -183,7 +175,6 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          {/* Links */}
           <div className="text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
@@ -194,7 +185,6 @@ export default function RegisterPage() {
           </div>
         </form>
 
-        {/* Back to Home */}
         <div className="text-center">
           <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
             ← Back to Home
