@@ -29,7 +29,6 @@ export default function BorrowModal({
 	onDurationChange,
 	isBorrowing
 }: BorrowModalProps) {
-	// Close modal on escape key
 	useEffect(() => {
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' && isOpen) {
@@ -39,7 +38,7 @@ export default function BorrowModal({
 
 		if (isOpen) {
 			document.addEventListener('keydown', handleEscape);
-			document.body.style.overflow = 'hidden'; // Prevent background scroll
+			document.body.style.overflow = 'hidden';
 		}
 
 		return () => {
@@ -48,7 +47,6 @@ export default function BorrowModal({
 		};
 	}, [isOpen, onClose]);
 
-	// Calculate due date
 	const dueDate = new Date(Date.now() + loanDuration * 24 * 60 * 60 * 1000);
 	const isOverdue = dueDate < new Date();
 
@@ -56,9 +54,7 @@ export default function BorrowModal({
 
 	return (
 		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-			{/* Modal Container */}
 			<div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl transform transition-all duration-300 ease-out">
-				{/* Header */}
 				<div className="flex items-center justify-between p-6 border-b border-gray-100">
 					<div className="flex items-center space-x-3">
 						<div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
@@ -78,9 +74,7 @@ export default function BorrowModal({
 					</button>
 				</div>
 
-				{/* Content */}
 				<div className="p-6">
-					{/* Book Information */}
 					<div className="bg-gray-50 rounded-lg p-4 mb-6">
 						<div className="flex items-start space-x-3">
 							<div className="w-12 h-16 bg-gradient-to-br from-teal-400 to-teal-600 rounded-md flex items-center justify-center flex-shrink-0">
@@ -106,7 +100,6 @@ export default function BorrowModal({
 						</div>
 					</div>
 
-					{/* Loan Duration Selection */}
 					<div className="mb-6">
 						<label className="block text-sm font-medium text-gray-700 mb-3">
 							Loan Duration
@@ -130,7 +123,6 @@ export default function BorrowModal({
 						</div>
 					</div>
 
-					{/* Due Date Information */}
 					<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
 						<div className="flex items-center space-x-2 mb-2">
 							<Clock className="w-4 h-4 text-blue-600" />
@@ -159,7 +151,6 @@ export default function BorrowModal({
 						</div>
 					</div>
 
-					{/* Warning Message */}
 					{isOverdue && (
 						<div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
 							<div className="flex items-center space-x-2">
@@ -172,7 +163,6 @@ export default function BorrowModal({
 						</div>
 					)}
 
-					{/* Terms and Conditions */}
 					<div className="bg-gray-50 rounded-lg p-4 mb-6">
 						<h5 className="text-sm font-medium text-gray-900 mb-2">Loan Terms</h5>
 						<ul className="text-xs text-gray-600 space-y-1">
@@ -184,7 +174,6 @@ export default function BorrowModal({
 					</div>
 				</div>
 
-				{/* Footer */}
 				<div className="flex space-x-3 p-6 border-t border-gray-100 bg-gray-50 rounded-b-xl">
 					<button
 						onClick={onClose}
@@ -212,7 +201,6 @@ export default function BorrowModal({
 				</div>
 			</div>
 
-			{/* Backdrop click handler */}
 			<div 
 				className="absolute inset-0 -z-10" 
 				onClick={onClose}
